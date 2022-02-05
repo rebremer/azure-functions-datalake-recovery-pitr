@@ -1,0 +1,12 @@
+# DO NOT include azure-functions-worker in this file
+# The Python Worker is managed by Azure Functions platform
+# Manually managing azure-functions-worker may cause unexpected issues
+#python -m pip install --upgrade pip
+
+azure-functions
+azure-functions-durable
+
+azure-storage-blob==12.6.0
+azure-identity
+#azure-storage-queue==2.1.0
+azure-storage-file-datalake
