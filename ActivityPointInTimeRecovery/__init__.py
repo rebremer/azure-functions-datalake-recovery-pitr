@@ -9,13 +9,10 @@
 # https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-storage-blob-triggered-function
 
 import logging
-import os
 from datetime import datetime, timedelta
-from azure.identity import ClientSecretCredential, DefaultAzureCredential
-from azure.core.exceptions import ResourceExistsError
+from azure.identity import DefaultAzureCredential
 from azure.storage.blob import (
-    BlobServiceClient,
-    ContainerClient
+    BlobServiceClient
 )
 
 def main(jsoninput: str) -> str:
@@ -24,19 +21,11 @@ def main(jsoninput: str) -> str:
     storage_account_name = jsoninput["storage_account_name"]
     file_system = jsoninput["file_system"]
     folder_name = jsoninput["folder_name"]
-    authentication = jsoninput["authentication"]
     restore_date = jsoninput["restore_date"]
 
-    # Create token to authenticate to storage account
-    if authentication == "spn":
-        # Create token to authenticate to storage account
-        token_credential = ClientSecretCredential(
-            os.environ["TENANT_ID"],
-            os.environ["CLIENT_ID"],
-            os.environ["CLIENT_SECRET"]
-        )
-    else:
-        token_credential = DefaultAzureCredential()
+    # In case no MI is used, add AZURE_TENANT_ID, AZURE_CLIENT_ID and AZURE_CLIENT_SECRET to environment variables
+    token_credential = DefaultAzureCredential()
+
     # Create handlers
     blob_service_client = BlobServiceClient(account_url="{}://{}.blob.core.windows.net".format("https", storage_account_name), credential=token_credential)
     container_client = blob_service_client.get_container_client(file_system)

@@ -14,7 +14,7 @@ import azure.durable_functions as df
 async def main(req: func.HttpRequest, starter: str) -> func.HttpResponse:
     client = df.DurableOrchestrationClient(starter)
 
-    json_input = {"storage_account_name": req.params.get('storage_account_name'), "file_system": req.params.get('file_system'), "number_of_folders": req.params.get('number_of_folders'), "authentication": req.params.get('authentication'), "restore_date": req.params.get('restore_date')}
+    json_input = {"storage_account_name": req.params.get('storage_account_name'), "file_system": req.params.get('file_system'), "number_of_folders": req.params.get('number_of_folders'), "restore_date": req.params.get('restore_date')}
 
     instance_id = await client.start_new(req.route_params["functionName"], None, json_input)
 

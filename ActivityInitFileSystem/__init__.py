@@ -7,14 +7,12 @@
 # - run pip install -r requirements.txt
 
 import logging
-import os
 from datetime import datetime
 from azure.storage.filedatalake import DataLakeServiceClient
-from azure.identity import ClientSecretCredential, DefaultAzureCredential
+from azure.identity import DefaultAzureCredential
 from azure.core.exceptions import ResourceExistsError
 from azure.storage.blob import (
-    BlobServiceClient,
-    ContainerClient
+    BlobServiceClient
 )
 
 def main(jsoninput: str) -> str:
@@ -23,19 +21,9 @@ def main(jsoninput: str) -> str:
     storage_account_name = jsoninput["storage_account_name"]
     file_system = jsoninput["file_system"]
     counter = int(jsoninput["counter"])
-    authentication = jsoninput["authentication"]
 
-    # Create token to authenticate to storage account
-    if authentication == "spn":
-        # Create token to authenticate to storage account
-        token_credential = ClientSecretCredential(
-            os.environ["TENANT_ID"],
-            os.environ["CLIENT_ID"],
-            os.environ["CLIENT_SECRET"]
-        )
-    else:
-        token_credential = DefaultAzureCredential()
-    #
+    # In case no MI is used, add AZURE_TENANT_ID, AZURE_CLIENT_ID and AZURE_CLIENT_SECRET to environment variables
+    token_credential = DefaultAzureCredential()
     adls_service_client = DataLakeServiceClient(account_url="{}://{}.dfs.core.windows.net".format("https", storage_account_name), credential=token_credential)
     file_system_client = adls_service_client.get_file_system_client(file_system=file_system)
     #
