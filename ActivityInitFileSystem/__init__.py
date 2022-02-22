@@ -37,12 +37,15 @@ def main(jsoninput: str) -> str:
         return 0
     #
     i=0
-    while (i < 100):
+    while (i < 10):
         currentTime = datetime.now()  
         j=0
         while (j < 10):
             blob_client = blob_service_client.get_blob_client(container=file_system, blob="dir" + str(10000 - counter) + "/subdir" + str(i) + "/test-snapshot" + str(j) + ".txt")
             blob_client.upload_blob(data="test-snapshot_" + str(currentTime))
+
+            metadata={'time':'{}'.format(currentTime)}
+            blob_client.create_snapshot(metadata=metadata)
             #
             j+=1
         i+=1
