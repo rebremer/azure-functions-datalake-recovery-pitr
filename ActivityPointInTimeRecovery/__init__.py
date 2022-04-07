@@ -110,8 +110,10 @@ def main(jsoninput: str) -> str:
                 # => Error state, no way to resolve, requires analysis of content of blob what shall be done. 
                 # => Do nothing, log error message
                 blob_client = blob_service_client.get_blob_client(container=file_system, blob="_log/exception/" + restore_date + ".txt")
-                blob_client.append_block(data="Scenario 4: " + str(blob.name) + restore_date + "_" + str(datetime.now()),overwrite=True)
-
+                if blob_client.exists():
+                    blob_client.append_blob(data="Scenario 4: " + str(blob.name) + restore_date + "_" + str(datetime.now()))
+                else:
+                    blob_client.upload_blob(data="Scenario 4: " + str(blob.name) + restore_date + "_" + str(datetime.now()))
                 print("Scenario 4: error")
         else:
             print (blob.name + ' is a directory')
