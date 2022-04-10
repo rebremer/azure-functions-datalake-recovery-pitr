@@ -44,6 +44,6 @@ $function_mi=$(az functionapp show -n $FUNNAME -g $RG | ConvertFrom-Json).identi
 az role assignment create --assignee $function_mi --role "Storage Blob Data Contributor" --scope $scope
 func azure functionapp publish $FUNNAME
 # Subscribe to event grid
-$eventgridkey=$(az functionapp keys list -n $FUNNAME -g $RG | ConvertFrom-Json).systemKeys.eventgrid_extension
-$eventgridurl= "https://$FUNNAME.azurewebsites.net/runtime/webhooks/EventGrid^^^?functionName=EventGridTriggerCreateSnapshot^^^&code=$eventgridkey"
-az eventgrid event-subscription create --name testrb --source-resource-id "/subscriptions/$SUB/resourceGroups/$RG/providers/microsoft.storage/storageaccounts/$DLSTOR" --included-event-types Microsoft.Storage.BlobCreated --endpoint $eventgridurl
+$stordlid = "/subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Storage/storageaccounts/$DLSTOR"
+$endpointid = "/subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Web/sites/$FUNNAME/functions/EventGridTriggerCreateSnapshot"
+az eventgrid event-subscription create --name storegversion --source-resource-id $stordlid --endpoint-type azurefunction --endpoint $endpointid --included-event-types Microsoft.Storage.BlobCreated Microsoft.Storage.BlobUpdated

@@ -8,4 +8,4 @@ This gives a short, high-level overview of how this repo may be used.
 
 ![Overview](overview.jpg)
 
-Todo, commands can be found in ```script.ps1```
+See instructions in my blog post: https://towardsdatascience.com/how-to-recover-your-azure-data-lake-5b5e53f3736f or commands in ```script.ps1```
