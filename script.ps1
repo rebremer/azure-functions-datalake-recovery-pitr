@@ -11,8 +11,7 @@ $FILE_SYSTEM='<<your data lake file system name>>'
 $EMAIL='<<your email address>>'
 $FUNNAME='<<your azure function name>>'
 $FUNPN='<<your azure function plan>>'
-$EGTOPIC='<<your evengrid name>>'
-$SPN='<<your service principal name>>'
+$SPN='<<your service principal name>>' # Optional, only needed for part 4 to test locally
 
 #
 # ++++++++++++++++++++++++++++++++++++ Part 1 - Setup Azure Data Lake ++++++++++++++++++++++++++++++++++++
@@ -42,11 +41,7 @@ az storage container create --account-name $DLSTOR -n $FILE_SYSTEM --auth-mode l
 #
 # ++++++++++++++++++++++++++++++++++++ Part 2 - Setup event based snapshots creation ++++++++++++++++++++++++++++++++++++
 #
-# 1. Create event grid topic
-#
-az eventgrid topic create -g $RG --name $EGTOPIC -l $LOC
-
-# 2. Deploy Event Grid triggered Functions
+# 1. Deploy Event Grid triggered Functions
 #
 az functionapp plan create -g $RG -n $FUNPN --sku B1 --is-linux true          
 az storage account create -n $FUNSTOR -g $RG -l $LOC --sku Standard_LRS --kind StorageV2                   
@@ -55,7 +50,7 @@ $function_mi=$(az functionapp show -n $FUNNAME -g $RG | ConvertFrom-Json).identi
 az role assignment create --assignee $function_mi --role "Storage Blob Data Contributor" --scope $scope                             
 func azure functionapp publish $FUNNAME
 
-# 3. Subscribe to event grid
+# 2. Subscribe to event grid
 #
 $stordlid = "/subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Storage/storageaccounts/$DLSTOR"
 $endpointid = "/subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Web/sites/$FUNNAME/functions/EventGridTriggerCreateSnapshot"
