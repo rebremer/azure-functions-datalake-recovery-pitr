@@ -6,7 +6,6 @@
 azure-functions
 azure-functions-durable
 
-azure-storage-blob==12.6.0
+azure-storage-blob
 azure-identity
-#azure-storage-queue==2.1.0
 azure-storage-file-datalake
