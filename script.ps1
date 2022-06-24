@@ -54,7 +54,7 @@ func azure functionapp publish $FUNNAME
 #
 $stordlid = "/subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Storage/storageaccounts/$DLSTOR"
 $endpointid = "/subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Web/sites/$FUNNAME/functions/EventGridTriggerCreateSnapshot"
-az eventgrid event-subscription create --name storegversion --source-resource-id $stordlid --endpoint-type azurefunction --endpoint $endpointid --included-event-types Microsoft.Storage.BlobCreated Microsoft.Storage.BlobUpdated
+az eventgrid event-subscription create --name storegversion --source-resource-id $stordlid --endpoint-type azurefunction --endpoint $endpointid --included-event-types Microsoft.Storage.BlobCreated
 
 #
 # ++++++++++++++++++++++++++++++++++++ Part 3 - deploy recovery solution in Azure Function ++++++++++++++++++++++++++++++++++++
