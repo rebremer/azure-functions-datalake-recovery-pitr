@@ -24,6 +24,6 @@ def main(event: func.EventGridEvent):
     token_credential = DefaultAzureCredential()
 
     currentTime = datetime.now()
-    blob_client = BlobClient.from_blob_url(blob_url=event.get_json()["url"], credential=token_credential)
+    blob_client = BlobClient.from_blob_url(blob_url=event.get_json()["blobUrl"], credential=token_credential)
     metadata={'time':'{}'.format(currentTime)}
     blob_client.create_snapshot(metadata=metadata)
