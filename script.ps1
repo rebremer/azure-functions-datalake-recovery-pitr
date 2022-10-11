@@ -67,9 +67,14 @@ func azure functionapp publish $FUNNAME
 #
 $code=$(az functionapp keys list -n $FUNNAME -g $RG | ConvertFrom-Json).functionKeys.default
 
-# 3. Create sample folders and files in File System
+# 3a. Create sample folders and files in File System
 #
 Invoke-RestMethod "https://$FUNNAME.azurewebsites.net/api/orchestrators/OrchestratorInitFileSystem?code=$code&storage_account_name=$DLSTOR&file_system=$FILE_SYSTEM&number_of_folders=2"
+
+# 3b. Compute size of all files in File System
+#
+Invoke-RestMethod "http://$FUNNAME.azurewebsites.net/api/orchestrators/OrchestratorUsedCapacityContainer?storage_account_name=$DLSTOR&file_system=$FILE_SYSTEM"
+
 
 # 4. Restore data lake (play around with restore_date in URL to test # four scenarios described in 2.2
 #
